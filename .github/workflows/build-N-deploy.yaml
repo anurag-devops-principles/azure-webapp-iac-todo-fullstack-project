@@ -10,35 +10,27 @@ permissions:
   statuses: write
 
 jobs:
-  static_code_analysis:
-    uses: anurag-vj/actions_reusable_workflows/.github/workflows/sonarqube.yaml@main
-    with:
-      job_name: 'Static Code Analysis (Sonarqube)'
-      runs_on: 'ubuntu-latest'
-      SONAR_HOST_URL: http://74.225.207.162:9000
-      SONAR_TOKEN: sqp_0e27f48acbdf261a8de5632a9476d70719198755
-      PROJECT_KEY: frontend-ui-todo
-
   software_composition_analysis:
-    uses: anurag-vj/actions_reusable_workflows/.github/workflows/react.js.yaml@main
-    needs: static_code_analysis
+    uses: anurag-vj/devops-cicd-actions-workflows-library/.github/workflows/react.js.yaml@main
     with:
       job_name: 'Software Composition Analysis (Dependency Security)'
       runs_on: 'ubuntu-latest'
       node_version: 16.x
       cache: 'npm'
+      working_directory: './frontend'
 
   code_quality_checks:
-    uses: anurag-vj/actions_reusable_workflows/.github/workflows/code_quality.yaml@main
+    uses: anurag-vj/devops-cicd-actions-workflows-library/.github/workflows/code_quality.yaml@main
     needs: software_composition_analysis
     with: 
       job_name: 'Code Quality and Linting'
       runs_on: 'ubuntu-latest'
       node_version: 16.x
       cache: 'npm'
+      working_directory: './frontend'
 
   application_build:
-    uses: anurag-vj/actions_reusable_workflows/.github/workflows/npm_build.yaml@main
+    uses: anurag-vj/devops-cicd-actions-workflows-library/.github/workflows/npm_build.yaml@main
     needs: code_quality_checks
     with:
       job_name: 'Build and Artifact Package'
@@ -47,9 +39,10 @@ jobs:
       cache: 'npm'
       artifacts_name: reactui-${{ github.run_id }}
       artifacts_path: package
+      working_directory: './frontend'
 
   application_deployment:
-    uses: anurag-vj/actions_reusable_workflows/.github/workflows/deploy_build.yaml@main
+    uses: anurag-vj/devops-cicd-actions-workflows-library/.github/workflows/deploy_build.yaml@main
     needs: application_build
     secrets:
       AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}

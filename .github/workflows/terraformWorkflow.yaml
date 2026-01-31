@@ -1,0 +1,51 @@
+name: Terraform | Azure Web App | IaC
+
+run-name: Terraform Deploy • ${{ github.ref_name }} • ${{ github.actor }} • ${{ github.run_id }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_job:
+        description: 'Run Apply Job'
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  terraform_security_checks:
+    uses: anurag-vj/actions_reusable_workflows/.github/workflows/terraform_security.yaml@main
+    with:
+      job_name: 'Terraform Security and Compliance Checks'
+      runs_on: 'ubuntu-latest'
+      working_directory: './terraform/environment'
+
+  terraform-init-plan:
+    uses: anurag-vj/devops-cicd-library/.github/workflows/terraform_plan.yaml@main
+    needs: terraform_security_checks
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    with:
+      job_name: 'terraform plan'
+      runs_on: 'ubuntu-latest'
+      working_directory: './terraform/environment'
+
+  terraform-apply:
+    uses: anurag-vj/devops-cicd-library/.github/workflows/terraform_apply.yaml@main
+    needs: terraform-init-plan
+    if: ${{ github.event.inputs.run_job == 'true' }}
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    with:
+      job_name: 'terraform apply'
+      runs_on: 'ubuntu-latest'
+      working_directory: './terraform/environment'
