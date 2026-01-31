@@ -1,6 +1,6 @@
-name: 'react_npm_build_workflow'
+name: Frontend | Build | WebApp Deployment
 
-run-name: Deployed by @${{ github.actor }}
+run-name: Frontend Build and Deploy • ${{ github.ref_name }} • ${{ github.actor }} • ${{ github.run_id }}
 
 on:
   workflow_dispatch:
