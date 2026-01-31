@@ -17,14 +17,14 @@ permissions:
 
 jobs:
   terraform_security_checks:
-    uses: anurag-vj/actions_reusable_workflows/.github/workflows/terraform_security.yaml@main
+    uses: anurag-vj/devops-cicd-actions-workflows-library/.github/workflows/terraform_security.yaml@main
     with:
       job_name: 'Terraform Security and Compliance Checks'
       runs_on: 'ubuntu-latest'
       working_directory: './terraform/environment'
 
   terraform-init-plan:
-    uses: anurag-vj/devops-cicd-library/.github/workflows/terraform_plan.yaml@main
+    uses: aanurag-vj/devops-cicd-actions-workflows-library/.github/workflows/terraform_plan.yaml@main
     needs: terraform_security_checks
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -37,7 +37,7 @@ jobs:
       working_directory: './terraform/environment'
 
   terraform-apply:
-    uses: anurag-vj/devops-cicd-library/.github/workflows/terraform_apply.yaml@main
+    uses: aanurag-vj/devops-cicd-actions-workflows-library/.github/workflows/terraform_apply.yaml@main
     needs: terraform-init-plan
     if: ${{ github.event.inputs.run_job == 'true' }}
     secrets:
