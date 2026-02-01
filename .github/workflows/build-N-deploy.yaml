@@ -58,4 +58,4 @@ jobs:
       runs_on: ubuntu-latest
       artifacts_name: reactui-${{ github.run_id }}
       artifacts_path: package
-      web_app_name: 'web-app-todo-application'
+      web_app_name: 'dev-practice-application'

@@ -1,0 +1,23 @@
+name: Terraform | Resources | Destroy
+
+run-name: Terraform Destroy • ${{ github.ref_name }} • ${{ github.actor }} • ${{ github.run_id }}
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  terraform-destroy:
+    uses: anurag-vj/devops-cicd-actions-workflows-library/.github/workflows/terraform_destroy.yaml@main
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    with:
+      job_name: 'Terraform Destroy'
+      runs_on: 'ubuntu-latest'
+      working_directory: './terraform/environment'
