@@ -4,6 +4,12 @@ run-name: Frontend Build and Deploy • ${{ github.ref_name }} • ${{ github.ac
 
 on:
   workflow_dispatch:
+    inputs:
+      deploy_job:
+        description: 'Run Deployment Job'
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -44,6 +50,7 @@ jobs:
   application_deployment:
     uses: anurag-vj/devops-cicd-actions-workflows-library/.github/workflows/deploy_build.yaml@main
     needs: application_build
+    if: ${{ github.event.inputs.deploy_job == 'true' }}
     secrets:
       AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
     with:

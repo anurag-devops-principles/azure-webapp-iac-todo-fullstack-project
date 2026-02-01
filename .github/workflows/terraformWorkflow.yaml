@@ -32,7 +32,7 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     with:
-      job_name: 'terraform plan'
+      job_name: 'Terraform Plan'
       runs_on: 'ubuntu-latest'
       working_directory: './terraform/environment'
 
@@ -46,6 +46,6 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     with:
-      job_name: 'terraform apply'
+      job_name: 'Terraform Apply'
       runs_on: 'ubuntu-latest'
       working_directory: './terraform/environment'
