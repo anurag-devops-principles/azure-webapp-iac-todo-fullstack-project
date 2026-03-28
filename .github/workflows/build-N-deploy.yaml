@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   software_composition_analysis:
-    uses: anurag-vj/devops-cicd-actions-workflows-library/.github/workflows/react.js.yaml@main
+    uses: anurag-devops-principles/devops-cicd-workflows-pipeline-library/.github/workflows/retirejs.yaml@main
     with:
       job_name: 'Software Composition Analysis (Dependency Security)'
       runs_on: 'ubuntu-latest'
@@ -26,7 +26,7 @@ jobs:
       working_directory: './frontend'
 
   code_quality_checks:
-    uses: anurag-vj/devops-cicd-actions-workflows-library/.github/workflows/code_quality.yaml@main
+    uses: anurag-devops-principles/devops-cicd-workflows-pipeline-library/.github/workflows/code_quality.yaml@main
     needs: software_composition_analysis
     with: 
       job_name: 'Code Quality and Linting'
@@ -36,7 +36,7 @@ jobs:
       working_directory: './frontend'
 
   application_build:
-    uses: anurag-vj/devops-cicd-actions-workflows-library/.github/workflows/npm_build.yaml@main
+    uses: anurag-devops-principles/devops-cicd-workflows-pipeline-library/.github/workflows/npm_build.yaml@main
     needs: code_quality_checks
     with:
       job_name: 'Build and Artifact Package'
@@ -48,7 +48,7 @@ jobs:
       working_directory: './frontend'
 
   application_deployment:
-    uses: anurag-vj/devops-cicd-actions-workflows-library/.github/workflows/deploy_build.yaml@main
+    uses: anurag-devops-principles/devops-cicd-workflows-pipeline-library/.github/workflows/deploy_build.yaml@main
     needs: application_build
     if: ${{ github.event.inputs.deploy_job == 'true' }}
     secrets:

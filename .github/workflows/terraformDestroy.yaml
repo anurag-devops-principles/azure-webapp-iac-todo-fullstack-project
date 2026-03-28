@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   terraform-destroy:
-    uses: anurag-vj/devops-cicd-actions-workflows-library/.github/workflows/terraform_destroy.yaml@main
+    uses: anurag-devops-principles/devops-cicd-workflows-pipeline-library/.github/workflows/terraform_destroy.yaml@main
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
